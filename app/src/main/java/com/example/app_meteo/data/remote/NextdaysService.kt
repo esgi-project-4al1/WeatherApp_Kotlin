@@ -7,7 +7,7 @@ import com.example.app_meteo.model.nextDaysModel.NextDaysModel
 
 interface NextdaysService {
     @GET("/v1/forecast")
-    suspend fun getWeather(
+    suspend fun getTheWeather(
         @Query("latitude") latitude: String,
         @Query("longitude") longitude: String,
         @Query("daily") dailyParameters: List<String>,

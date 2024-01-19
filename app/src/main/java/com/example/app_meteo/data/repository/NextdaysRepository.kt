@@ -10,8 +10,8 @@ class NextdaysRepository ( private  val  service: NextdaysService) {
     val weatherLiveData: LiveData<NextDaysModel>
         get() = nextSevenDaysWeatherLiveData
 
-    suspend fun getWeather(latitude: String, longitude: String, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
-        val result = service.getWeather(latitude, longitude, dailyParameters, timezone, forecastDays)
+    suspend fun getTheWeather(latitude: String, longitude: String, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
+        val result = service.getTheWeather(latitude, longitude, dailyParameters, timezone, forecastDays)
 
         if(result.body() != null) {
             nextSevenDaysWeatherLiveData.value = result.body()

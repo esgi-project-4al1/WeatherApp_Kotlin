@@ -8,8 +8,8 @@ import com.example.app_meteo.model.nextDaysModel.NextDaysModel
 
 class NextDaysViewModel (private val nextdaysrepository: NextdaysRepository) : ViewModel() {
 
-        suspend fun getWeather(latitude: String, longitude: String, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
-            nextdaysrepository.getWeather(latitude, longitude, dailyParameters, timezone, forecastDays)
+        suspend fun getTheWeather(latitude: String, longitude: String, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
+            nextdaysrepository.getTheWeather(latitude, longitude, dailyParameters, timezone, forecastDays)
         }
 
         val weatherLiveData: LiveData<NextDaysModel>
