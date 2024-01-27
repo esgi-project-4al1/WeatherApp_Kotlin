@@ -1,4 +1,4 @@
-package com.example.app_meteo.model.nextDaysModel.Hours
+package com.example.app_meteo.model.Hours
 
 data class Hours(
   val temperature_2m: List<Double>,

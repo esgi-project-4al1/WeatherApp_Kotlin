@@ -1,4 +1,4 @@
-package com.example.app_meteo.model.nextDaysModel.Hours
+package com.example.app_meteo.model.Hours
 
 data class HoursModel(
     val elevation: Double,
