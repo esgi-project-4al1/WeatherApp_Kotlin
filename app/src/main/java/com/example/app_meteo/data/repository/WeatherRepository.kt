@@ -14,7 +14,7 @@ class WeatherRepository(private val weatherService: WeatherService) {
         get() = weatherLiveData
 
     suspend fun getWeather(lat: String , lon : String , appID : String){
-         val result = weatherService.getWeather(lat,lon,appID)
+         val result = weatherService.getTheWeather(lat,lon,appID)
 
         if(result.body() != null )
         {
