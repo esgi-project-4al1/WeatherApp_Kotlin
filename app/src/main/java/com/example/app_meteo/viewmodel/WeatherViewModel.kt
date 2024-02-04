@@ -12,4 +12,5 @@ class WeatherViewModel( private val weatherRepository: WeatherRepository) {
 
    val weather: LiveData<WeatherModel>
        get() = weatherRepository.weather
+
 }

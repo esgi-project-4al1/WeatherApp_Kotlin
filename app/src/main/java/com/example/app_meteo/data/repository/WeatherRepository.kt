@@ -2,10 +2,10 @@ package com.example.app_meteo.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.app_meteo.data.remote.WeatherService
+import com.example.app_meteo.data.remote.WeatherApiService
 import com.example.app_meteo.model.WeatherModel
 
-class WeatherRepository(private val weatherService: WeatherService) {
+class WeatherRepository(private val weatherService: WeatherApiService) {
 
      private val weatherLiveData = MutableLiveData<WeatherModel>()
 
@@ -14,11 +14,11 @@ class WeatherRepository(private val weatherService: WeatherService) {
         get() = weatherLiveData
 
     suspend fun getWeather(lat: String , lon : String , appID : String){
-         val result = weatherService.getTheWeather(lat,lon,appID)
-
-        if(result.body() != null )
-        {
-               weatherLiveData.postValue(result.body())
-        }
-    }
+//         val result = weatherService.getTheWeather(lat,lon,appID)
+//
+//        if(result.body() != null )
+//        {
+//               weatherLiveData.postValue(result.body())
+//        }
+   }
 }
