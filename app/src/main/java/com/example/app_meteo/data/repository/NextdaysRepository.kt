@@ -1,5 +1,6 @@
 package com.example.app_meteo.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.app_meteo.data.remote.NextdaysService
@@ -12,8 +13,11 @@ class NextdaysRepository ( private  val  service: NextdaysService) {
 
     suspend fun getTheWeather(latitude: String, longitude: String, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
         val result = service.getTheWeather(latitude, longitude, dailyParameters, timezone, forecastDays)
+        Log.d("NextDaysFragment", "in repository before check , result is : ${result.body()}")
 
         if(result.body() != null) {
+            Log.d("NextDaysFragment", "in repository , result is : ${result.body()}")
+
             nextSevenDaysWeatherLiveData.value = result.body()
         }
     }
