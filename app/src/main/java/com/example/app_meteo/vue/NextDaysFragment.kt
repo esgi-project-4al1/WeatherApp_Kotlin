@@ -87,7 +87,7 @@ class NextDaysFragment : Fragment() {
                     Log.d("NextDaysFragment", "Observer triggered with data: $it")
                     if(it.daily != null) {
                         setNext7DaysWeatherToUI(it.daily!!)
-                        sendDataToSharedPref(it.daily!!)
+                        sendDatatoDb(it.daily!!)
                     }
                     else {
                         Log.d("id.daily", "Null")
@@ -157,7 +157,7 @@ class NextDaysFragment : Fragment() {
             }
         }
 
-        private fun sendDataToSharedPref(nextDaysData: Daily) {
+        private fun sendDatatoDb(nextDaysData: Daily) {
             nextDaysLocalDataViewModel.sendData(nextDaysData)
         }
 
