@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_meteo.R
-import com.example.app_meteo.model.nextDaysModel.NextDays
-class AdapterNextdays  (private val weatherData: NextDays) :
+import android.util.Log
+import com.example.app_meteo.model.nextDaysModel.Daily
+
+
+class AdapterNextdays  (private val weatherData: Daily) :
         RecyclerView.Adapter<AdapterNextdays.ViewHolder>() {
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,7 +30,7 @@ class AdapterNextdays  (private val weatherData: NextDays) :
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
             holder.textViewDay.text = "Day ${position + 1}"
-            holder.textViewTemperature.text = "${weatherData.temperature_max[position].toInt()}/${weatherData.temperature_min[position].toInt()}"
+            holder.textViewTemperature.text = "${weatherData.temperature_2m_max[position].toInt()}/${weatherData.temperature_2m_min[position].toInt()}"
             holder.textViewSunrise.text = "Sunrise: ${weatherData.sunrise[position]}"
             holder.textViewSunset.text = "Sunset: ${weatherData.sunset[position]}"
         }

@@ -2,7 +2,7 @@ package com.example.app_meteo.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.app_meteo.data.remote.WeatherService
+import com.example.app_meteo.data.services.WeatherService
 import com.example.app_meteo.model.WeatherModel
 
 class WeatherRepository(private val weatherService: WeatherService) {

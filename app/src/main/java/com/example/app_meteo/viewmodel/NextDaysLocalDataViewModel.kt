@@ -1,18 +1,16 @@
 package com.example.app_meteo.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.app_meteo.data.local.NextDaysLocalData
 import com.example.app_meteo.data.repository.NextDaysLocalDataRepository
-import com.example.app_meteo.model.nextDaysModel.NextDays
-import com.example.app_meteo.model.nextDaysModel.NextDaysModel
+import com.example.app_meteo.model.nextDaysModel.Daily
 
 class NextDaysLocalDataViewModel( private val repository: NextDaysLocalDataRepository) : ViewModel(){
 
-    fun getData(): NextDays? {
+    fun getData(): Daily? {
         return repository.getData()
     }
 
-    fun sendData(weatherData: NextDays) {
+    fun sendData(weatherData: Daily) {
         repository.sendData(weatherData)
     }
 }

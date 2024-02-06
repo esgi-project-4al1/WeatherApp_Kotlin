@@ -1,9 +1,8 @@
-package com.example.app_meteo.data.local
+package com.example.app_meteo.data.db
 
 import android.content.Context
 import android.util.Log
-import com.example.app_meteo.model.nextDaysModel.NextDays
-import com.example.app_meteo.model.nextDaysModel.NextDaysModel
+import com.example.app_meteo.model.nextDaysModel.Daily
 import com.google.gson.Gson
 
 class NextDaysLocalData(context: Context) {
@@ -11,7 +10,7 @@ class NextDaysLocalData(context: Context) {
         private val sharedPref = context.getSharedPreferences("WeatherApp", Context.MODE_PRIVATE)
         private val gson = Gson()
 
-        fun sendData(weatherData: NextDays) {
+        fun sendData(weatherData: Daily) {
             val data = gson.toJson(weatherData)
             Log.d("NextDaysLocalData", "Saving data: $data")
 
@@ -20,11 +19,11 @@ class NextDaysLocalData(context: Context) {
             editor.apply()
         }
 
-        fun getData(): NextDays? {
+        fun getData(): Daily? {
             val data = sharedPref.getString("NextDaysData", null)
             Log.d("NextDaysFragment", "in getdata service, retrieved data: $data")
 
-            return gson.fromJson(data, NextDays::class.java)
+            return gson.fromJson(data, Daily::class.java)
 
 
         }

@@ -1,4 +1,4 @@
-package com.example.app_meteo.data.remote
+package com.example.app_meteo.data.services
 
 import com.example.app_meteo.model.ActualLocation
 import retrofit2.Response

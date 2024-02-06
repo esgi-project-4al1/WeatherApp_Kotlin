@@ -2,7 +2,7 @@ package com.example.app_meteo.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.app_meteo.data.remote.ActualLocationService
+import com.example.app_meteo.data.services.ActualLocationService
 import com.example.app_meteo.model.ActualLocation
 
 class ActualLocationRepository ( private  val actualLocation: ActualLocationService){

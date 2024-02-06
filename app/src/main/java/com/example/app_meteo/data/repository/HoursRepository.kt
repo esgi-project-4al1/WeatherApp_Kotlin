@@ -2,7 +2,7 @@ package com.example.app_meteo.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.app_meteo.data.remote.HoursServices
+import com.example.app_meteo.data.services.HoursServices
 import com.example.app_meteo.model.Hours.HoursModel
 
 class HoursRepository (private  val  service: HoursServices) {

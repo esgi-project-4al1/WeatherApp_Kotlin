@@ -9,14 +9,13 @@ import com.example.app_meteo.model.WeatherModel
 
 class WeatherViewModel( private val weatherRepository: WeatherRepository) : ViewModel(){
 
-    private val _weatherLiveData = MutableLiveData<WeatherModel>()
-    val weatherLiveData: LiveData<WeatherModel>
-        get() = _weatherLiveData
     suspend fun  getTheWeather(lat: String , lon : String , appID : String){
             weatherRepository.getWeather(lat,lon,appID)
-        _weatherLiveData.value = weatherRepository.weather.value
 
     }
+
+    val weatherLiveData: LiveData<WeatherModel>
+        get() = weatherRepository.weather
 
 
 }

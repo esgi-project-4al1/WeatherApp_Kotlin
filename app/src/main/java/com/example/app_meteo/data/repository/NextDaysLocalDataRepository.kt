@@ -1,15 +1,14 @@
 package com.example.app_meteo.data.repository
 
-import com.example.app_meteo.data.local.NextDaysLocalData
-import com.example.app_meteo.model.nextDaysModel.NextDays
-import com.example.app_meteo.model.nextDaysModel.NextDaysModel
+import com.example.app_meteo.data.db.NextDaysLocalData
+import com.example.app_meteo.model.nextDaysModel.Daily
 
 class NextDaysLocalDataRepository( private val  service : NextDaysLocalData) {
-    fun sendData(weatherData: NextDays) {
+    fun sendData(weatherData: Daily) {
         service.sendData(weatherData)
     }
 
-    fun getData(): NextDays? {
+    fun getData(): Daily? {
         return service.getData()
     }
 }
