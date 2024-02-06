@@ -71,7 +71,7 @@ class NextDaysFragment : Fragment() {
 
 
             if(nextDaysData != null) {
-                val adapter = AdapterNextdays(nextDaysData!!)
+                val adapter = AdapterNextdays(nextDaysData)
                 recyclerView.adapter = adapter
                 setNext7DaysWeatherToUI(nextDaysData)
 

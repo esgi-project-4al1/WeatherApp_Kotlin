@@ -117,7 +117,7 @@ class WeatherDayFragement() : Fragment(){
         }
     }
 
-    private fun sendDatatoDb(dataWeather: DataWeather) {
+    private fun   sendDatatoDb(dataWeather: DataWeather) {
         weatherDayLocalDataViewModel.sendData(dataWeather)
     }
 
