@@ -9,14 +9,17 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app_meteo.model.modelSimpleDays.DayItem
 
 import com.example.app_meteo.vue.DaysAdapter
+import com.example.app_meteo.vue.PassData
 import kotlin.math.log
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,PassData {
 
    // private lateinit var weatherViewModel: WeatherDaysViewModel
-
+    private lateinit var  daysList : List<Any?>
+    private lateinit var  nextDaysList : List<DayItem>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,7 +54,9 @@ class MainActivity : AppCompatActivity() {
             pressureTextView
         )
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+      */  val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+
+     /*
         val daysList = listOf(
             DayItem("Lun", "icone1", "10°C", "20°C"),
             DayItem("Mar", "icone2", "12°C", "22°C"),
@@ -62,15 +67,26 @@ class MainActivity : AppCompatActivity() {
             DayItem("Dim", "icone7", "6°C", "16°C")
         )
 
+*/
 
-        val adapter = DaysAdapter(daysList)
-        Log.e("taille", "${adapter.itemCount}")
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        if(nextDaysList != null) {
+            val adapter = DaysAdapter(nextDaysList)
 
-        weatherViewModel.getWeatherByCurrentLocation()
+            Log.e("taille", "${adapter.itemCount}")
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapter
+        }
+//        weatherViewModel.getWeatherByCurrentLocation()
 
-       */
+
+    }
+
+    override fun PassWeatherDayData(data: List<Any?>) {
+        daysList = data
+    }
+
+    override fun PassNextDaysData(data: List<DayItem>) {
+        nextDaysList = data
     }
 
 

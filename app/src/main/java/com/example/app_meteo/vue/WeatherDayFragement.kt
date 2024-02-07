@@ -49,13 +49,28 @@ class WeatherDayFragement() : Fragment(){
 
         initWeatherDayLocalData()
         initNextDaysViewModel()
-        Log.d("WeatherTest","Launching Api ")
+        Log.d("WeatherTest", "Launching Api ")
 
         getWeatherByCurrentLocation()
         Log.d("WeatherTest", "After calling API")
         val weatherData = getWeatherDayLocalData()
 
-        Log.d("WeatherTest","WeatherData: $weatherData")
+        weatherViewModel.weatherLiveData.observe(requireActivity()) {
+            if (it != null) {
+                Log.d("NextDaysFragment", "Observer triggered with data: $it")
+                if (it != null) {
+                    //setNext7DaysWeatherToUI(it.daily!!)
+                    sendDatatoDb(it)
+                    (it!!)
+                } else {
+                    Log.d("id.daily", "Null")
+                }
+                val dataList = sendDatatoUi(weatherData!!)
+
+                Log.d("WeatherTest", "WeatherData: $weatherData")
+            }
+        }
+
     }
 
 
@@ -133,7 +148,7 @@ class WeatherDayFragement() : Fragment(){
         locationTask.execute()
     }
 
-    private fun sendDatatoUi( weatherData: DataWeather) : List<Any?>
+    fun sendDatatoUi( weatherData: DataWeather) : List<Any?>
     {
         //Temperature
         val temperatureCelsius = (weatherData.main?.temp?.let { Change.kelvinToCelsius(it) })?.toInt()

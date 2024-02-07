@@ -56,14 +56,16 @@ class NextDaysFragment : Fragment() {
             // fonction qui set data to UI
             // UI for 7 days
 
-            val lat = "48.8566"
-            val lon = "2.3522"
+            val lat = 48.8566
+            val lon = 2.3522
+
+            val passData : PassData =   activity as    PassData
             print("HEY im here")
 
             initNextDaysViewModel()
             initNextDaysLocalData()
 
-            callAPIServiceNextDays(lat, lon)
+            getNextDaysWeatherByCurrentLocation()
 
             val nextDaysData = getNextDaysLocalData()
             // recyclerView = binding.recyclerViewWeather
@@ -74,6 +76,7 @@ class NextDaysFragment : Fragment() {
             if(nextDaysData != null) {
 
               //  setNext7DaysWeatherToUI(nextDaysData)
+                passData.PassNextDaysData(sendDataToUI(nextDaysData))
 
             }
             else{
@@ -86,7 +89,7 @@ class NextDaysFragment : Fragment() {
                 if(it != null) {
                     Log.d("NextDaysFragment", "Observer triggered with data: $it")
                     if(it.daily != null) {
-                      //  setNext7DaysWeatherToUI(it.daily!!)
+                       passData.PassNextDaysData(sendDataToUI(it.daily!!))
                         sendDatatoDb(it.daily!!)
                     }
                     else {
@@ -126,8 +129,21 @@ class NextDaysFragment : Fragment() {
 
         }
 
+    fun getNextDaysWeatherByCurrentLocation() {
+        val locationTask = LocationTask(object : LocationTask.LocationCallback {
+            override fun onLocationFetched(latitude: Double, longitude: Double) {
+                Log.e("Latitude", "LAtitude: ${latitude}")
+                callAPIServiceNextDays(latitude, longitude)
+            }
 
-        private fun callAPIServiceNextDays(lat: String, lon: String) {
+            override fun onLocationFetchError(errorMessage: String) {
+            }
+        })
+        locationTask.execute()
+    }
+
+
+    private fun callAPIServiceNextDays(lat: Double, lon: Double) {
             val daily = listOf("weathercode", "temperature_2m_max", "temperature_2m_min", "sunrise", "sunset")
 
             if(InternetConnection.isNetworkAvailable(requireActivity())) {
@@ -164,7 +180,7 @@ class NextDaysFragment : Fragment() {
 
 
 
-      private fun dataitem(nextDaysData:    Daily): List<DayItem> {
+      private fun sendDataToUI(nextDaysData:    Daily): List<DayItem> {
           // Day 1
           // icons 0 or 100 == sunny
           //  1 to 50 == cloud sunny

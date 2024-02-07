@@ -11,7 +11,7 @@ class NextdaysRepository ( private  val  service: NextdaysService) {
     val weatherLiveData: LiveData<NextDaysModel>
         get() = nextSevenDaysWeatherLiveData
 
-    suspend fun getTheWeather(latitude: String, longitude: String, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
+    suspend fun getTheWeather(latitude: Double, longitude: Double, dailyParameters: List<String>, timezone: String, forecastDays: Int) {
         val result = service.getTheWeather(latitude, longitude, dailyParameters, timezone, forecastDays)
         Log.d("Repository", "in repository before check , result is : ${result.body()}")
 
