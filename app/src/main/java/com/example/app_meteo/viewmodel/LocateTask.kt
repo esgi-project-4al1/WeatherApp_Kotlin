@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.net.URL
+import java.net.UnknownHostException
 
 class LocationTask(private val callback: LocationCallback) {
 
@@ -12,10 +13,14 @@ class LocationTask(private val callback: LocationCallback) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val response = URL("https://ipinfo.io/loc").readText(Charsets.UTF_8)
-                Log.e("Response", "${response} ")
+                Log.e("LocationTask", "${response} ")
                 handleResponse(response)
+            } catch (e: UnknownHostException) {
+                Log.e("LocationTask", "Erreur de résolution d'hôte: ${e.message}")
+                callback.onLocationFetchError("Erreur de résolution d'hôte")
             } catch (e: Exception) {
-                Log.e("WeatherViewModel", "erreur ")
+                Log.e("LocationTask", "Erreur inattendue: ${e.message}")
+                callback.onLocationFetchError("Erreur inattendue")
             }
         }
     }
@@ -27,7 +32,8 @@ class LocationTask(private val callback: LocationCallback) {
             val longitude = coordinates[1].toDouble()
             callback.onLocationFetched(latitude, longitude)
         } else {
-            Log.e("WeatherViewModel", "erreurhandleresponse")
+            Log.e("LocationTask", "Erreur dans la manipulation de la réponse")
+            callback.onLocationFetchError("Erreur dans la manipulation de la réponse")
         }
     }
 
