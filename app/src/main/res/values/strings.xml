@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">App_Meteo</string>
+    <string name="NoData">--</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="vent">Vent</string>
+    <string name="humidite">Humidité</string>
+    <string name="pression">Pression</string>
+    <string name="hpa">hPa</string>
 </resources>

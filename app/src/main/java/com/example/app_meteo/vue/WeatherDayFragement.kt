@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import com.google.android.material.snackbar.Snackbar
 
 import com.example.app_meteo.R
+import com.example.app_meteo.utils.Change
 
 class WeatherDayFragement() : Fragment(){
 
@@ -45,14 +46,12 @@ class WeatherDayFragement() : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val latitude = 48.8534
-        val longitude = 2.3488
 
         initWeatherDayLocalData()
         initNextDaysViewModel()
         Log.d("WeatherTest","Launching Api ")
 
-        callAPIServiceWeatherDay(latitude, longitude)
+        getWeatherByCurrentLocation()
         Log.d("WeatherTest", "After calling API")
         val weatherData = getWeatherDayLocalData()
 
@@ -121,6 +120,53 @@ class WeatherDayFragement() : Fragment(){
         weatherDayLocalDataViewModel.sendData(dataWeather)
     }
 
+    fun getWeatherByCurrentLocation() {
+        val locationTask = LocationTask(object : LocationTask.LocationCallback {
+            override fun onLocationFetched(latitude: Double, longitude: Double) {
+                Log.e("Latitude", "LAtitude: ${latitude}")
+                callAPIServiceWeatherDay(latitude, longitude)
+            }
+
+            override fun onLocationFetchError(errorMessage: String) {
+            }
+        })
+        locationTask.execute()
+    }
+
+    private fun sendDatatoUi( weatherData: DataWeather) : List<Any?>
+    {
+        //Temperature
+        val temperatureCelsius = (weatherData.main?.temp?.let { Change.kelvinToCelsius(it) })?.toInt()
+        //Te
+        val temperatureCelsiusMax = (weatherData.main?.tempMax.let { Change.kelvinToCelsius(it!!) })?.toInt()
+        val temperatureCelsiusMin = (weatherData.main?.tempMin?.let { Change.kelvinToCelsius(it) })?.toInt()
+        val windSpeedKmPerHour = (weatherData.wind?.speed?.let { Change.metersPerSecondToKmPerHour(it) })?.toInt()
+        val sunriseTime = weatherData.sys?.sunrise?.let { Change.unixTimestampToLocalTime(it.toLong()) }
+        val sunsetTime = weatherData.sys?.sunset?.let { Change.unixTimestampToLocalTime(it.toLong()) }
+        val readableDate = weatherData.dt?.let { Change.timestampToReadableDate(it.toLong()) }
+        val humidity = weatherData.main?.humidity
+        val pressure = weatherData.main?.pressure
+        val country = weatherData.name
+        val infotext = weatherData.weather[0].description
+
+        val dataWeather = listOf(
+            temperatureCelsius,
+            temperatureCelsiusMax,
+            temperatureCelsiusMin,
+            windSpeedKmPerHour,
+            sunriseTime,
+            sunsetTime,
+            readableDate,
+            humidity,
+            pressure,
+            country,
+            infotext
+        )
+
+        return dataWeather
+
+
+    }
 
 
 

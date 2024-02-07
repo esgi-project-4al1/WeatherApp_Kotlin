@@ -18,7 +18,8 @@ import android.os.Bundle
     import com.example.app_meteo.data.services.NextdaysService
     import com.example.app_meteo.data.repository.NextDaysLocalDataRepository
     import com.example.app_meteo.data.repository.NextdaysRepository
-    import kotlinx.coroutines.launch
+import com.example.app_meteo.model.modelSimpleDays.DayItem
+import kotlinx.coroutines.launch
     import com.example.app_meteo.utils.Constants.OpenMeteo_API_BASE_URL
     import com.example.app_meteo.viewmodel.NextDaysLocalDataViewModel
     import com.example.app_meteo.viewmodel.NextDaysLocalDataViewModelFactory
@@ -26,9 +27,9 @@ import android.os.Bundle
     import com.google.android.material.snackbar.Snackbar
     import java.util.TimeZone
 
-import com.example.app_meteo.databinding.NextdaysBinding  // Import the generated binding class
-import com.example.app_meteo.model.nextDaysModel.Daily
-import com.example.app_meteo.utils.Constants
+    import com.example.app_meteo.model.nextDaysModel.Daily
+    import com.example.app_meteo.utils.Constants
+    import com.example.app_meteo.utils.Change
 
 class NextDaysFragment : Fragment() {
 
@@ -38,14 +39,14 @@ class NextDaysFragment : Fragment() {
         private lateinit var recyclerView: RecyclerView
 
 
-        private lateinit var binding: NextdaysBinding
+
 
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View {
-            binding = NextdaysBinding.inflate(inflater, container, false)
-            return binding.root
+            return inflater.inflate(R.layout.activity_main, container, false)
+
         }
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
@@ -65,15 +66,14 @@ class NextDaysFragment : Fragment() {
             callAPIServiceNextDays(lat, lon)
 
             val nextDaysData = getNextDaysLocalData()
-            recyclerView = binding.recyclerViewWeather
+            // recyclerView = binding.recyclerViewWeather
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             Log.d("NextDaysFragment", "onViewCreated: nextDaysData: $nextDaysData")
 
 
             if(nextDaysData != null) {
-                val adapter = AdapterNextdays(nextDaysData)
-                recyclerView.adapter = adapter
-                setNext7DaysWeatherToUI(nextDaysData)
+
+              //  setNext7DaysWeatherToUI(nextDaysData)
 
             }
             else{
@@ -86,7 +86,7 @@ class NextDaysFragment : Fragment() {
                 if(it != null) {
                     Log.d("NextDaysFragment", "Observer triggered with data: $it")
                     if(it.daily != null) {
-                        setNext7DaysWeatherToUI(it.daily!!)
+                      //  setNext7DaysWeatherToUI(it.daily!!)
                         sendDatatoDb(it.daily!!)
                     }
                     else {
@@ -161,13 +161,76 @@ class NextDaysFragment : Fragment() {
             nextDaysLocalDataViewModel.sendData(nextDaysData)
         }
 
-        private fun setNext7DaysWeatherToUI(weather: Daily) {
 
-            val adapter = AdapterNextdays(weather)
 
-            recyclerView.adapter = adapter
 
-        }
+      private fun dataitem(nextDaysData:    Daily): List<DayItem> {
+          // Day 1
+          // icons 0 or 100 == sunny
+          //  1 to 50 == cloud sunny
+          // 51  to 99 = cloudy
+
+          val temperaturMaxDay1 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[1]).toString()
+          val temperatureMinDay1 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[1]).toString()
+          val dateDay1 = Change.formatDates(nextDaysData.sunrise[1]).toString()
+          val iconetypeDay1 = Change.weatherCodetoIcon(nextDaysData.weathercode[1])
+
+
+          // Day2
+          val temperaturMaxDay2 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[2]).toString()
+          val temperatureMinDay2 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[2]).toString()
+          val dateDay2 = Change.formatDates(nextDaysData.sunrise[2])
+          val iconetypeDay2 = Change.weatherCodetoIcon(nextDaysData.weathercode[2])
+
+
+          //Day3
+          val temperaturMaxDay3 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[3]).toString()
+          val temperatureMinDay3 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[3]).toString()
+          val dateDay3 = Change.formatDates(nextDaysData.sunrise[3])
+          val iconetypeDay3 = Change.weatherCodetoIcon(nextDaysData.weathercode[3])
+
+
+          //Day4
+          val temperaturMaxDay4 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[4]).toString()
+          val temperatureMinDay4 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[4]).toString()
+          val dateDay4 = Change.formatDates(nextDaysData.sunrise[4])
+          val iconetypeDay4 = Change.weatherCodetoIcon(nextDaysData.weathercode[4])
+
+
+          //Day5
+          val temperaturMaxDay5 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[5]).toString()
+          val temperatureMinDay5 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[5]).toString()
+          val dateDay5 = Change.formatDates(nextDaysData.sunrise[5])
+          val iconetypeDay5 = Change.weatherCodetoIcon(nextDaysData.weathercode[5])
+
+
+          //Day6
+          val temperaturMaxDay6 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[6]).toString()
+          val temperatureMinDay6 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[6]).toString()
+          val dateDay6 = Change.formatDates(nextDaysData.sunrise[6])
+          val iconetypeDay6 = Change.weatherCodetoIcon(nextDaysData.weathercode[6])
+
+
+          //Day7
+          val temperaturMaxDay7 = Change.kelvinToCelsius(nextDaysData.temperature_2m_max[7]).toString()
+          val temperatureMinDay7 = Change.kelvinToCelsius(nextDaysData.temperature_2m_min[7]).toString()
+          val dateDay7 = Change.formatDates(nextDaysData.sunrise[7])
+          val iconetypeDay7 = Change.weatherCodetoIcon(nextDaysData.weathercode[7])
+
+
+
+
+          return listOf(
+              DayItem(dateDay1, iconetypeDay1, temperatureMinDay1, temperaturMaxDay1),
+              DayItem(dateDay2, iconetypeDay2, temperatureMinDay2, temperaturMaxDay2),
+              DayItem(dateDay3, iconetypeDay3, temperatureMinDay3, temperaturMaxDay3),
+              DayItem(dateDay4, iconetypeDay4, temperatureMinDay4, temperaturMaxDay4),
+              DayItem(dateDay5, iconetypeDay5, temperatureMinDay5, temperaturMaxDay5),
+              DayItem(dateDay6, iconetypeDay6, temperatureMinDay6, temperaturMaxDay6),
+              DayItem(dateDay7, iconetypeDay7, temperatureMinDay7, temperaturMaxDay7)
+          )
+      }
+
 
 
         }
