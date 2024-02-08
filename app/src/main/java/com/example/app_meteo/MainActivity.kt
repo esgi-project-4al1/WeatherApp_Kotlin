@@ -3,6 +3,7 @@ package com.example.app_meteo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +41,6 @@ import kotlinx.coroutines.launch
 import java.util.TimeZone
 
 class MainActivity : AppCompatActivity()  {
-    private lateinit var recyclerView: RecyclerView
     private lateinit var nextDaysViewModel: NextDaysViewModel
     private lateinit var nextDaysLocalDataViewModel: NextDaysLocalDataViewModel
     private lateinit var weatherViewModel : WeatherViewModel
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity()  {
         setContentView(R.layout.activity_main)
 
        val recyclerView :RecyclerView = findViewById(R.id.recyclerView)
-
+        val search : SearchView = findViewById(R.id.searchView)
         // Initialize view models for NextDays
         initNextDaysViewModel()
         initNextDaysLocalData()
@@ -59,6 +59,19 @@ class MainActivity : AppCompatActivity()  {
         initWeatherDayLocalData()
         initWeatherDayViewModel()
 
+
+        search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("TexetSearch", "${query}")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("ONtAPE", "${newText}")
+                return true
+            }
+
+        })
 
         // Get weather data
         getWeatherByCurrentLocation()
@@ -82,12 +95,6 @@ class MainActivity : AppCompatActivity()  {
                 Log.d("WeatherTest", "WeatherData: $weatherData")
             }
         }
-
-
-
-
-
-
 
         // Get NextDays data
         getNextDaysWeatherByCurrentLocation()
@@ -193,10 +200,6 @@ class MainActivity : AppCompatActivity()  {
 
 
     private fun sendNextDaysDataToUI(nextDaysData: Daily): List<DayItem> {
-        // Day 1
-        // icons 0 or 100 == sunny
-        //  1 to 50 == cloud sunny
-        // 51  to 99 = cloudy
 
         val temperaturMaxDay0 = (nextDaysData.temperature_2m_max[0]).toString()
         val temperatureMinDay0 = (nextDaysData.temperature_2m_min[0]).toString()
@@ -246,9 +249,6 @@ class MainActivity : AppCompatActivity()  {
 
         //Day7
 
-
-
-        Log.d("ListNextDays","dayitem :$dateDay0 , $temperaturMaxDay0 , $temperatureMinDay0 ")
 
         return listOf(
             DayItem(dateDay0, iconetypeDay0, temperatureMinDay0, temperaturMaxDay0),

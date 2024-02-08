@@ -12,8 +12,20 @@
     <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        >
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/Base.Theme.App_Meteo"
+            app:searchIcon="@drawable/baseline_search_24">
+
+        </androidx.appcompat.widget.SearchView>
         <LinearLayout
+            android:layout_marginTop="40dp"
             android:id="@+id/topLinear"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -53,7 +65,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
                 android:text="@string/NoData"
-                android:textSize="90sp"
+                android:textSize="60sp"
                 android:textColor="@color/white">
 
             </TextView>
