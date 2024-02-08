@@ -209,7 +209,7 @@
                         android:layout_height="25dp"
                         android:src="@drawable/sunrise"
                         android:contentDescription="@string/app_name"
-                        app:tint="#000"/>
+                        />
                     <Space
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"/>
@@ -256,7 +256,7 @@
                         android:layout_height="25dp"
                         android:src="@drawable/sunset"
                         android:contentDescription="@string/sunset"
-                        app:tint="#000"/>
+                        />
                     <Space
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"/>
@@ -302,7 +302,7 @@
                         android:layout_height="25dp"
                         android:src="@drawable/wind"
                         android:contentDescription="@string/vent"
-                        app:tint="#000"/>
+                        app:tint="@color/imageViewcolor"/>
                     <Space
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"/>
@@ -355,7 +355,7 @@
                         android:layout_height="25dp"
                         android:src="@drawable/humidity"
                         android:contentDescription="@string/humidite"
-                        app:tint="#000"/>
+                        app:tint="@color/imageViewcolor"/>
                     <Space
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"/>
@@ -400,7 +400,7 @@
                         android:layout_height="25dp"
                         android:src="@drawable/pressure"
                         android:contentDescription="@string/pression"
-                        app:tint="#000"/>
+                        app:tint="@color/imageViewcolor"/>
                     <Space
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"/>

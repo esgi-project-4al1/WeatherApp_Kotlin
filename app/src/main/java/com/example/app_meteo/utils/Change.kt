@@ -1,5 +1,6 @@
 package com.example.app_meteo.utils
 
+import com.example.app_meteo.R
 import java.util.*
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -47,18 +48,11 @@ object  Change {
 
         }
 
-        fun weatherCodetoIcon( weathecode : Int ) : String
-        {
-             if(weathecode in 1..49) {
-                 return "@drawable/cloudy_sunny.png"
-             }
-            else if(weathecode in 51..99)
-             {
-                return  "@drawable/rain.png"
-            }
-            else{
-                return  "@drawable/sun.png"
-             }
-
+    fun weatherCodetoIcon(weatherCode: Int): Int {
+        return when (weatherCode) {
+            in 1..49 -> R.drawable.cloudy_sunny
+            in 51..99 -> R.drawable.rain
+            else -> R.drawable.sun
         }
+    }
     }

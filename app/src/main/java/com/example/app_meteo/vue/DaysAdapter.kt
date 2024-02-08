@@ -4,11 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_meteo.R
 import com.example.app_meteo.model.modelSimpleDays.DayItem
 import com.example.app_meteo.utils.Change
+import com.example.app_meteo.utils.Change.weatherCodetoIcon
 
 class DaysAdapter(private val daysList: List<DayItem>) :
     RecyclerView.Adapter<DaysAdapter.DayViewHolder>() {
@@ -17,6 +19,7 @@ class DaysAdapter(private val daysList: List<DayItem>) :
         val dayTextView: TextView = itemView.findViewById(R.id.day_days_text_view)
         val tempMinTextView: TextView = itemView.findViewById(R.id.temp_min_text_view)
         val tempMaxTextView: TextView = itemView.findViewById(R.id.temp_max_text_view)
+        val iconeImageView: ImageView =  itemView.findViewById(R.id.imageView)
 
     }
 
@@ -28,6 +31,8 @@ class DaysAdapter(private val daysList: List<DayItem>) :
 
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         val dayItem = daysList[position]
+
+        holder.iconeImageView.setImageResource(weatherCodetoIcon(dayItem.iconName.toInt()))
         if(position == 0){
             holder.dayTextView.text = "Auj."
             holder.tempMinTextView.text = dayItem.tempMin
