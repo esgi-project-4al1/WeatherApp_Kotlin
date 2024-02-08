@@ -1,11 +1,14 @@
 package com.example.app_meteo.utils
 
-    import java.time.Instant
-    import java.time.LocalDateTime
-    import java.time.ZoneId
-    import java.time.format.DateTimeFormatter
+import java.util.*
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-    object  Change {
+object  Change {
         fun kelvinToCelsius(kelvin: Double): Double {
             return kelvin - 273.15
         }
@@ -20,9 +23,22 @@ package com.example.app_meteo.utils
             return localDateTime.format(formatter)
         }
 
-        fun timestampToReadableDate(timestamp: Long): String {
+    fun capitalizeFirstLetter(word: String): String {
+        return word.capitalize()
+    }
+    fun getDayOfWeekFromString(dateString: String): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+        val date = sdf.parse("$dateString/2024")
+
+        val dayFormat = SimpleDateFormat("EEE", Locale.FRANCE)
+
+        return capitalizeFirstLetter(dayFormat.format(date!!))
+    }
+
+
+    fun timestampToReadableDate(timestamp: Long): String {
             val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.of("Europe/Paris"))
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
             return localDateTime.format(formatter)
         }
 

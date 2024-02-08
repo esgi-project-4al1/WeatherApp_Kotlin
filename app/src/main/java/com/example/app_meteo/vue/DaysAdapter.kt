@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_meteo.R
 import com.example.app_meteo.model.modelSimpleDays.DayItem
+import com.example.app_meteo.utils.Change
 
 class DaysAdapter(private val daysList: List<DayItem>) :
     RecyclerView.Adapter<DaysAdapter.DayViewHolder>() {
 
     class DayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dayTextView: TextView = itemView.findViewById(R.id.day_days_text_view)
-
         val tempMinTextView: TextView = itemView.findViewById(R.id.temp_min_text_view)
         val tempMaxTextView: TextView = itemView.findViewById(R.id.temp_max_text_view)
 
@@ -27,13 +27,21 @@ class DaysAdapter(private val daysList: List<DayItem>) :
     }
 
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
-        Log.e("taille", "${position}")
         val dayItem = daysList[position]
-        Log.e("taille", "${dayItem.dayName}")
-        holder.dayTextView.text = dayItem.dayName
+        if(position == 0){
+            holder.dayTextView.text = "Auj."
+            holder.tempMinTextView.text = dayItem.tempMin
+            holder.tempMaxTextView.text = dayItem.tempMax
+        }else{
 
-        holder.tempMinTextView.text = dayItem.tempMin
-        holder.tempMaxTextView.text = dayItem.tempMax
+
+            holder.dayTextView.text = Change.getDayOfWeekFromString(dayItem.dayName)
+            holder.tempMinTextView.text = dayItem.tempMin
+            holder.tempMaxTextView.text = dayItem.tempMax
+        }
+
+
+
 
     }
 
