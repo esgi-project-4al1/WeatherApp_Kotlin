@@ -1,5 +1,6 @@
 package com.example.app_meteo
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var nextDaysUi : List<DayItem>
     private  var nextDaysUiSearched : List<DayItem>? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -89,7 +91,12 @@ class MainActivity : AppCompatActivity()  {
                      nextdaysdata = getNextDaysLocalData()!!
                     if (nextdaysdata != null) {
 
-                        nextDaysUiSearched =  sendNextDaysDataToUI(nextdaysdata)
+                        nextDaysUi =  sendNextDaysDataToUI(nextdaysdata)
+                        val adapter = nextDaysUi.let { DaysAdapter(it) }
+
+                        // Log.d("Adapter", "data : $nextDaysUi")
+                        recyclerView.adapter = adapter
+
                         Log.d("nextdays", "has been changed : $nextDaysUiSearched" )
 
                     } else {
@@ -132,7 +139,7 @@ class MainActivity : AppCompatActivity()  {
         getWeatherByCurrentLocation()
          weatherData = getWeatherDayLocalData()!!
 
-            sendWeatherDatatoUi(weatherData)
+         sendWeatherDatatoUi(weatherData)
 
         weatherViewModel.weatherLiveData.observe(this) {
             if (it != null) {
