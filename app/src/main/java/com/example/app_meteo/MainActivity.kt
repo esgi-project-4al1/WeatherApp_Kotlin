@@ -1,12 +1,9 @@
 package com.example.app_meteo
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-
 import androidx.appcompat.widget.SearchView
-
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -45,7 +42,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.TimeZone
 
-
 class MainActivity : AppCompatActivity()  {
 
     private lateinit var nextDaysViewModel: NextDaysViewModel
@@ -59,13 +55,11 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var nextDaysUi : List<DayItem>
     private  var nextDaysUiSearched : List<DayItem>? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-       val recyclerView :RecyclerView = findViewById(R.id.recyclerView)
+        val recyclerView :RecyclerView = findViewById(R.id.recyclerView)
         val search : SearchView = findViewById(R.id.searchView)
 
         // Initialize view models for NextDays
@@ -76,60 +70,25 @@ class MainActivity : AppCompatActivity()  {
         initWeatherDayLocalData()
         initWeatherDayViewModel()
 
-        Log.d("Avan search listener", "Before search listener ")
-
         search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d("TexetSearch", "${query}")
-
-
+            override fun onQueryTextSubmit(query: String): Boolean
+            {
                 CallAPIToGetLocation( query)
-                Log.d("after api call ", "lan : $searchedLat , lon : $searchedLon")
-
-                    // Launch for 7 days
-                     callAPIServiceNextDays(searchedLat,searchedLon)
-                     nextdaysdata = getNextDaysLocalData()!!
-                    if (nextdaysdata != null) {
-
-                        nextDaysUi =  sendNextDaysDataToUI(nextdaysdata)
-                        val adapter = nextDaysUi.let { DaysAdapter(it) }
-
-                        // Log.d("Adapter", "data : $nextDaysUi")
-                        recyclerView.adapter = adapter
-
-                        Log.d("nextdays", "has been changed : $nextDaysUiSearched" )
-
-                    } else {
-                        Log.d("weatherdata", "NULL")
-                    }
-
-
-                    //WeatherDay
-
-
-                    callAPIServiceWeatherDay(searchedLat,searchedLon)
-
-                    weatherData = getWeatherDayLocalData()!!
-                    if (weatherData != null) {
-                        sendWeatherDatatoUi(weatherData)
-                    } else {
-                        Log.d("weatherdata", "NULL")
-                    }
-
-
-
-                    Log.d("in else submit", "im in else submit")
-
-
-
+                // Launch for 7 days
+                callAPIServiceNextDays(searchedLat,searchedLon)
+                nextdaysdata = getNextDaysLocalData()!!
+                nextDaysUi =  sendNextDaysDataToUI(nextdaysdata)
+                val adapter = nextDaysUi.let { DaysAdapter(it) }
+                recyclerView.adapter = adapter
+                // Launch for one day
+                callAPIServiceWeatherDay(searchedLat,searchedLon)
+                weatherData = getWeatherDayLocalData()!!
+                sendWeatherDatatoUi(weatherData)
                 return false
             }
 
-
-
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("ONtAPE", "${newText}")
+            override fun onQueryTextChange(newText: String?): Boolean
+            {
                 return true
             }
 
@@ -137,62 +96,54 @@ class MainActivity : AppCompatActivity()  {
 
         // Get weather data
         getWeatherByCurrentLocation()
-         weatherData = getWeatherDayLocalData()!!
-
-         sendWeatherDatatoUi(weatherData)
-
+        weatherData = getWeatherDayLocalData()!!
+        sendWeatherDatatoUi(weatherData)
         weatherViewModel.weatherLiveData.observe(this) {
             if (it != null) {
-              //  Log.d("NextDaysFragment", "Observer triggered with data: $it")
-                if (it != null) {
-                    sendDatatoDb(it)
-                    sendWeatherDatatoUi(it)
-                } else {
-                  //  Log.d("id.daily", "Null")
-                }
-
-
-             //   Log.d("WeatherTest", "WeatherData: $weatherData")
+                sendDatatoDb(it)
+                sendWeatherDatatoUi(it)
             }
-        }
+            else
+            {
+                Log.d("id.daily", "Null")
+            }
 
+        }
 
         // Get NextDays data
         getNextDaysWeatherByCurrentLocation()
         nextdaysdata = getNextDaysLocalData()!!
         nextDaysUi = sendNextDaysDataToUI(nextdaysdata)
         nextDaysViewModel.weatherLiveData.observe(this) {
-            if (it != null) {
-              //  Log.d("NextDaysFragment", "Observer triggered with data: $it")
-                if (it.daily != null) {
+            if (it != null)
+            {
+                if (it.daily != null)
+                {
                     nextDaysUi = sendNextDaysDataToUI(it.daily!!)
                     sendDatatoDb(it.daily!!)
-                } else {
+                }
+                else
+                {
                     Log.d("id.daily", "Null")
                 }
             }
         }
 
         var settingnextdata = nextDaysUi
-         if(nextDaysUiSearched != null)
-         {
+        if(nextDaysUiSearched != null)
+        {
              settingnextdata = nextDaysUiSearched as List<DayItem>
-         }
-        Log.d("settingdata", "nextdaysUI : $nextDaysUi , nextdaysSerched : $nextDaysUiSearched , settingdata : $settingnextdata")
-         val adapter = settingnextdata?.let { DaysAdapter(it) }
-
-       // Log.d("Adapter", "data : $nextDaysUi")
+        }
+        val adapter = settingnextdata?.let { DaysAdapter(it) }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-
     }
 
-    // Next days Impl
+    // Next days Implementation
     private fun getNextDaysLocalData(): Daily? {
 
         return nextDaysLocalDataViewModel.getData()
     }
-
     private fun initNextDaysLocalData() {
         val service = NextDaysLocalData(this)
         val repository = NextDaysLocalDataRepository(service)
@@ -202,8 +153,6 @@ class MainActivity : AppCompatActivity()  {
             NextDaysLocalDataViewModelFactory(repository)
         )[NextDaysLocalDataViewModel::class.java]
     }
-
-
     private fun initNextDaysViewModel() {
         val service = RetrofitObject.getInstance(Constants.OpenMeteo_API_BASE_URL).create(
             NextdaysService::class.java
@@ -216,7 +165,6 @@ class MainActivity : AppCompatActivity()  {
         )[NextDaysViewModel::class.java]
 
     }
-
     fun getNextDaysWeatherByCurrentLocation() {
         val locationTask = LocationTask(object : LocationTask.LocationCallback {
             override fun onLocationFetched(latitude: Double, longitude: Double) {
@@ -229,8 +177,6 @@ class MainActivity : AppCompatActivity()  {
         })
         locationTask.execute()
     }
-
-
     private fun callAPIServiceNextDays(lat: Double, lon: Double) {
         val daily =
             listOf("weathercode", "temperature_2m_max", "temperature_2m_min", "sunrise", "sunset")
@@ -280,68 +226,49 @@ class MainActivity : AppCompatActivity()  {
             }.show()
         }
     }
-
     private fun sendDatatoDb(nextDaysData: Daily) {
         nextDaysLocalDataViewModel.sendData(nextDaysData)
     }
-
-
+    // Preparing daysData
     private fun sendNextDaysDataToUI(nextDaysData: Daily): List<DayItem> {
 
+        // For Day0
         val temperaturMaxDay0 = (nextDaysData.temperature_2m_max[0]).toString()
         val temperatureMinDay0 = (nextDaysData.temperature_2m_min[0]).toString()
         val dateDay0 = Change.formatDates(nextDaysData.sunrise[0])
         val iconetypeDay0 = nextDaysData.weathercode[0]
-
+        // For Day1
         val temperaturMaxDay1 = (nextDaysData.temperature_2m_max[1]).toString()
         val temperatureMinDay1 = (nextDaysData.temperature_2m_min[1]).toString()
-        val dateDay1 = Change.formatDates(nextDaysData.sunrise[1]).toString()
+        val dateDay1 = Change.formatDates(nextDaysData.sunrise[1])
         val iconetypeDay1 = nextDaysData.weathercode[1]
-
-
         // Day2
         val temperaturMaxDay2 = (nextDaysData.temperature_2m_max[2]).toString()
         val temperatureMinDay2 = (nextDaysData.temperature_2m_min[2]).toString()
         val dateDay2 = Change.formatDates(nextDaysData.sunrise[2])
         val iconetypeDay2 = nextDaysData.weathercode[2]
-
-
         //Day3
         val temperaturMaxDay3 = (nextDaysData.temperature_2m_max[3]).toString()
         val temperatureMinDay3 = (nextDaysData.temperature_2m_min[3]).toString()
         val dateDay3 = Change.formatDates(nextDaysData.sunrise[3])
         val iconetypeDay3 = nextDaysData.weathercode[3]
-
-
         //Day4
         val temperaturMaxDay4 = (nextDaysData.temperature_2m_max[4]).toString()
         val temperatureMinDay4 = (nextDaysData.temperature_2m_min[4]).toString()
         val dateDay4 = Change.formatDates(nextDaysData.sunrise[4])
         val iconetypeDay4 = nextDaysData.weathercode[4]
-
-
         //Day5
         val temperaturMaxDay5 = (nextDaysData.temperature_2m_max[5]).toString()
         val temperatureMinDay5 = (nextDaysData.temperature_2m_min[5]).toString()
         val dateDay5 = Change.formatDates(nextDaysData.sunrise[5])
         val iconetypeDay5 = nextDaysData.weathercode[5]
-
-
         //Day6
         val temperaturMaxDay6 = (nextDaysData.temperature_2m_max[6]).toString()
         val temperatureMinDay6 = (nextDaysData.temperature_2m_min[6]).toString()
         val dateDay6 = Change.formatDates(nextDaysData.sunrise[6])
         val iconetypeDay6 = nextDaysData.weathercode[6]
 
-
-        //Day7
-
-
-
-
-
-       // Log.d("ListNextDays", "dayitem :$dateDay0 , $temperaturMaxDay0 , $temperatureMinDay0 ")
-
+        // Return result to DaysAdapter
         return listOf(
             DayItem(dateDay0, iconetypeDay0, temperatureMinDay0, temperaturMaxDay0),
             DayItem(dateDay1, iconetypeDay1, temperatureMinDay1, temperaturMaxDay1),
@@ -353,13 +280,11 @@ class MainActivity : AppCompatActivity()  {
 
         )
     }
-
-    //Weather Day Impli
+    //Weather Day Implementation
     private fun getWeatherDayLocalData(): DataWeather? {
 
         return weatherDayLocalDataViewModel.getData()
     }
-
     private fun initWeatherDayLocalData() {
         val service = WeatherDayLocalData(this)
         val repository = WeatherDayLocalDataRepository(service)
@@ -369,22 +294,15 @@ class MainActivity : AppCompatActivity()  {
             WeatherDayLocalDataViewModelFactory(repository)
         )[WeatherDayLocalDataViewModel::class.java]
     }
-
-
     private fun initWeatherDayViewModel() {
         val service = RetrofitObject.getInstance(Constants.OpenWeatherMap_API_BASE_URL).create(
             WeatherApiService::class.java
         )
         val repository = WeatherRepository(service)
-
         weatherViewModel =
             ViewModelProvider(this, WeatherFactory(repository))[WeatherViewModel::class.java]
-
     }
-
-
     private fun callAPIServiceWeatherDay(lat: Double, lon: Double) {
-
 
         if (InternetConnection.isNetworkAvailable(this)) {
 
@@ -397,7 +315,6 @@ class MainActivity : AppCompatActivity()  {
                 "NextDaysFragment",
                 "callingNext7DaysWeatherAPI: No internet connection, showing snackbar"
             )
-
             val snackBar =
                 Snackbar.make(
                     findViewById(android.R.id.content),
@@ -420,11 +337,11 @@ class MainActivity : AppCompatActivity()  {
             }.show()
         }
     }
-
+   // Save weather day data to db
     private fun sendDatatoDb(dataWeather: DataWeather) {
         weatherDayLocalDataViewModel.sendData(dataWeather)
     }
-
+    // Get weather by actual location
     private fun getWeatherByCurrentLocation() {
         val locationTask = LocationTask(object : LocationTask.LocationCallback {
             override fun onLocationFetched(latitude: Double, longitude: Double) {
@@ -437,29 +354,35 @@ class MainActivity : AppCompatActivity()  {
         })
         locationTask.execute()
     }
-
     private fun sendWeatherDatatoUi(weatherData: DataWeather) {
-        //Temperature
+        //Temperature TO celsius
         val temperatureCelsius =
             (weatherData.main?.temp?.let { Change.kelvinToCelsius(it) })?.toInt()
-        //Te
+        //Temperature Max
         val temperatureCelsiusMax =
             (weatherData.main?.tempMax.let { Change.kelvinToCelsius(it!!) })?.toInt()
+       // Temperature Min
         val temperatureCelsiusMin =
             (weatherData.main?.tempMin?.let { Change.kelvinToCelsius(it) })?.toInt()
+        // Wind Speed in Km/h
         val windSpeedKmPerHour =
             (weatherData.wind?.speed?.let { Change.metersPerSecondToKmPerHour(it) })?.toInt()
+        // Sunrise
         val sunriseTime =
             weatherData.sys?.sunrise?.let { Change.unixTimestampToLocalTime(it.toLong()) }
+        // Sunset
         val sunsetTime =
             weatherData.sys?.sunset?.let { Change.unixTimestampToLocalTime(it.toLong()) }
         val readableDate = weatherData.dt?.let { Change.timestampToReadableDate(it.toLong()) }
+        // Humidity
         val humidity = weatherData.main?.humidity
+        // Pressure
         val pressure = weatherData.main?.pressure
+        // Country
         val country = weatherData.name
         val infotext = weatherData.weather[0].description
 
-
+        // Preparing to send data to UI
         val countryTextView: TextView = findViewById(R.id.contry_text_view)
         val dateTextView: TextView = findViewById(R.id.date_text_view)
         val tempTextView: TextView = findViewById(R.id.temp_text_view)
@@ -471,7 +394,7 @@ class MainActivity : AppCompatActivity()  {
         val windTextView: TextView = findViewById(R.id.wind_text_view)
         val humidityTextView: TextView = findViewById(R.id.humidity_text_view)
         val pressureTextView: TextView = findViewById(R.id.pressure_text_view)
-
+         // Send data to UI
         countryTextView.text = country
         dateTextView.text = readableDate
         tempTextView.text = "$temperatureCelsius°C"
@@ -483,14 +406,8 @@ class MainActivity : AppCompatActivity()  {
         windTextView.text = "$windSpeedKmPerHour km/h"
         humidityTextView.text = "$humidity%"
         pressureTextView.text = "$pressure"
-
-
     }
-
-    // Logic for citySearch
-
-
-
+    // Get lan lon of the searched city
     private fun CallAPIToGetLocation(cityName: String) {
 
         lifecycleScope.launch {
@@ -504,9 +421,9 @@ class MainActivity : AppCompatActivity()  {
                 // Mettez à jour les variables de latitude et de longitude
                 searchedLat = locationPair.first
                 searchedLon = locationPair.second
-            //  callAPIServiceNextDays(searchedLat, searchedLon)
+
                 // Appelez ensuite les fonctions pour obtenir les données météorologiques actuelles
-           //  callAPIServiceWeatherDay(searchedLat, searchedLon)
+
                // Log.d("LocationPairInsieScope","LocationPair = $locationPair" )
                 Log.d("CitynameInside API ","city ! $cityName" )
                 Log.d("searchedlatlon", "lat & lon  = $searchedLon , $searchedLat")
