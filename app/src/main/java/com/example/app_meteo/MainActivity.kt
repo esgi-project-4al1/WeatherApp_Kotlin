@@ -1,5 +1,6 @@
 package com.example.app_meteo
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -73,12 +74,12 @@ class MainActivity : AppCompatActivity()  {
         search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean
             {
-                CallAPIToGetLocation( query)
+                callAPIToGetLocation(query)
                 // Launch for 7 days
                 callAPIServiceNextDays(searchedLat,searchedLon)
                 nextdaysdata = getNextDaysLocalData()!!
                 nextDaysUi =  sendNextDaysDataToUI(nextdaysdata)
-                val adapter = nextDaysUi.let { DaysAdapter(it) }
+                val adapter = DaysAdapter(nextDaysUi)
                 recyclerView.adapter = adapter
                 // Launch for one day
                 callAPIServiceWeatherDay(searchedLat,searchedLon)
@@ -134,7 +135,7 @@ class MainActivity : AppCompatActivity()  {
         {
              settingnextdata = nextDaysUiSearched as List<DayItem>
         }
-        val adapter = settingnextdata?.let { DaysAdapter(it) }
+        val adapter = DaysAdapter(settingnextdata)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
@@ -165,7 +166,7 @@ class MainActivity : AppCompatActivity()  {
         )[NextDaysViewModel::class.java]
 
     }
-    fun getNextDaysWeatherByCurrentLocation() {
+    private fun getNextDaysWeatherByCurrentLocation() {
         val locationTask = LocationTask(object : LocationTask.LocationCallback {
             override fun onLocationFetched(latitude: Double, longitude: Double) {
            //     Log.e("Latitude", "LAtitude: ${latitude}")
@@ -345,7 +346,7 @@ class MainActivity : AppCompatActivity()  {
     private fun getWeatherByCurrentLocation() {
         val locationTask = LocationTask(object : LocationTask.LocationCallback {
             override fun onLocationFetched(latitude: Double, longitude: Double) {
-                Log.e("Latitude", "LAtitude: ${latitude}")
+                Log.e("Latitude", "LAtitude: $latitude")
                 callAPIServiceWeatherDay(latitude, longitude)
             }
 
@@ -354,13 +355,14 @@ class MainActivity : AppCompatActivity()  {
         })
         locationTask.execute()
     }
+    @SuppressLint("SetTextI18n")
     private fun sendWeatherDatatoUi(weatherData: DataWeather) {
         //Temperature TO celsius
         val temperatureCelsius =
             (weatherData.main?.temp?.let { Change.kelvinToCelsius(it) })?.toInt()
         //Temperature Max
         val temperatureCelsiusMax =
-            (weatherData.main?.tempMax.let { Change.kelvinToCelsius(it!!) })?.toInt()
+            (weatherData.main?.tempMax.let { Change.kelvinToCelsius(it!!) }).toInt()
        // Temperature Min
         val temperatureCelsiusMin =
             (weatherData.main?.tempMin?.let { Change.kelvinToCelsius(it) })?.toInt()
@@ -408,7 +410,7 @@ class MainActivity : AppCompatActivity()  {
         pressureTextView.text = "$pressure"
     }
     // Get lan lon of the searched city
-    private fun CallAPIToGetLocation(cityName: String) {
+    private fun callAPIToGetLocation(cityName: String) {
 
         lifecycleScope.launch {
             val service = RetrofitObject.getInstance(Constants.OpenWeatherMap_API_BASE_URL).create(
