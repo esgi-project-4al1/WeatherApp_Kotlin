@@ -53,11 +53,82 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var nextDaysUi : List<DayItem>
     private  var nextDaysUiSearched : List<DayItem>? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val recyclerView :RecyclerView = findViewById(R.id.recyclerView)
+        val search : SearchView = findViewById(R.id.searchView)
+        // Initialize view models for NextDays
+        initNextDaysLocalData()
+        initNextDaysViewModel()
+        // Initialize view model for WeatherDay
+        initWeatherDayLocalData()
+        initWeatherDayViewModel()
 
-    fun OnDestroy(savedInstanceState: Bundle?) {
-
-
+        search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String): Boolean
+            {
+                callAPIToGetLocation(query)
+                // Launch for 7 days
+                callAPIServiceNextDays(searchedLat,searchedLon)
+                nextdaysdata = getNextDaysLocalData()!!
+                nextDaysUi =  sendNextDaysDataToUI(nextdaysdata)
+                val adapter = DaysAdapter(nextDaysUi)
+                recyclerView.adapter = adapter
+                // Launch for one day
+                callAPIServiceWeatherDay(searchedLat,searchedLon)
+                weatherData = getWeatherDayLocalData()!!
+                sendWeatherDatatoUi(weatherData)
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean
+            {
+                return true
+            }
+        })
+        // Get weather data
+        getWeatherByCurrentLocation()
+        weatherData = getWeatherDayLocalData()!!
+        sendWeatherDatatoUi(weatherData)
+        weatherViewModel.weatherLiveData.observe(this) {
+            if (it != null) {
+                sendDatatoDb(it)
+                sendWeatherDatatoUi(it)
+            }
+            else
+            {
+                Log.d("id.daily", "Null")
+            }
+        }
+        // Get NextDays data
+        getNextDaysWeatherByCurrentLocation()
+        nextdaysdata = getNextDaysLocalData()!!
+        nextDaysUi = sendNextDaysDataToUI(nextdaysdata)
+        nextDaysViewModel.weatherLiveData.observe(this) {
+            if (it != null)
+            {
+                if (it.daily != null)
+                {
+                    nextDaysUi = sendNextDaysDataToUI(it.daily!!)
+                    sendDatatoDb(it.daily!!)
+                }
+                else
+                {
+                    Log.d("id.daily", "Null")
+                }
+            }
+        }
+        var settingnextdata = nextDaysUi
+        if(nextDaysUiSearched != null)
+        {
+            settingnextdata = nextDaysUiSearched as List<DayItem>
+        }
+        val adapter = DaysAdapter(settingnextdata)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
     }
+
+
     // Next days Implementation
 
     private fun getNextDaysLocalData(): Daily? {
