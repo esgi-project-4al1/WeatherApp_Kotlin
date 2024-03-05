@@ -12,7 +12,7 @@ Clean and intuitive user interface.
 # Installation
 To run this application, follow these steps:
 
-Clone the repository: git clone https://github.com/yourusername/weather-app.git
+Clone the repository: git clone https://github.com/esgi-project-4al1/WeatherApp_Kotlin.git
 Open the project in Android Studio.
 Build and run the application on an Android device or emulator.
 
